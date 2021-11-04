@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.revature.dto.AddOrUpdateStudentDTO;
 import com.revature.model.Student;
 import com.revature.util.JDBCUtil;
 
@@ -28,18 +30,51 @@ public class StudentDao {
 
 	// CRUD: Create, Read, Update, Delete
 
-//	public void addStudent(Student student) throws SQLException {
-//
-//		// try with resources: used when we want for our applicaton to automatically
-//		// call the .close() method on whatever "resource"
-//		// we are using
-//		// The connection interface defines a close() method. This method, when invoked,
-//		// will disconnect from the database
-//		// Whenever we are done with our block of code inside with
-//		try (Connection con = JDBCUtil.getConnection()) {
-//
-//		}
-//	}
+	// Generally a good practice for Create methods in a DAO class is to return the
+	// object being created
+	// The same is true for Updating a particular record
+	// SO, we are going to change the return type from void to Student
+
+	public Student addStudent(AddOrUpdateStudentDTO student) throws SQLException {
+
+		// try with resources: used when we want for our applicaton to automatically
+		// call the .close() method on whatever "resource"
+		// we are using
+		// The connection interface defines a close() method. This method, when invoked,
+		// will disconnect from the database
+		// Whenever we are done with our block of code inside with
+		try (Connection con = JDBCUtil.getConnection()) {
+			String sql = "INSERT INTO students (student_first_name, student_last_name, student_classification, student_age)"
+					+ "VALUES (?,?,?,?)";
+
+			PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+			pstmt.setString(1, student.getFirstName());
+			pstmt.setString(2, student.getFirstName());
+			pstmt.setString(3, student.getClassification());
+			pstmt.setInt(4, student.getAge());
+
+			int numberOfRecordsInserted = pstmt.executeUpdate(); // Instead of execute query like we use for select
+																	// statement, INSERT, UPDATE, and DELETE will use
+			// executeUpdate(). This method returns an integer representing the number of
+			// rows that were modified.
+
+			// if numbers of records that were inserted is NOT 1, then something went wrong
+			if (numberOfRecordsInserted != 1) {
+				throw new SQLException("Adding a new Student was unsucessful");
+			}
+
+			ResultSet rs = pstmt.getGeneratedKeys();
+			rs.next(); // iterating to the first row
+			int automaticallyGeneratedId = rs.getInt(1); // grabing the first column information from that "row"
+
+			// When we return the Student that we created in the database
+			// The missing data is the automatically generated ID
+			// How do we obtain that id?
+			return new Student(automaticallyGeneratedId, student.getFirstName(), student.getLastName(),
+					student.getClassification(), student.getAge());
+		}
+	}
 
 	public List<Student> getAllStudents() throws SQLException {
 
@@ -115,41 +150,63 @@ public class StudentDao {
 
 	}
 
-	public void updateStudent(Student student) throws SQLException {
+	// Update student will return a student object corresponding to the record that
+	// was update, and takes in 2 argument corresponding with the studentid
+	// whose row we would like to update, and the AddOrUpdateStudentDTO object
+	// containing the properties of what we want to update that row with
+	public Student updateStudent(int studentId, AddOrUpdateStudentDTO student) throws SQLException {
 		try (Connection con = JDBCUtil.getConnection()) {
-			String sql = "UPDATE students SET student_first_name = UPPER(student_first_name)";
+			String sql = "UPDATE students " + "SET student_first_name = ?," + "		student_last_name = ?,"
+					+ "		student_classification = ?," + "		student_age = ?" + "WHERE " + "student_id = ?;";
 
 			PreparedStatement pstmt = con.prepareStatement(sql);
-			
-			ResultSet rs = pstmt.executeQuery(); 
-			
-			while (rs.next()) {
 
-				// 5. Grab all of the information from the current row that we are on, and
-				// create a Student object
-				// based on that information
+			pstmt.setString(1, student.getFirstName());
+			pstmt.setString(2, student.getFirstName());
+			pstmt.setString(3, student.getClassification());
+			pstmt.setInt(4, student.getAge());
+			pstmt.setInt(5, studentId);
 
-				int id = rs.getInt("student_id");
-				String firstName = rs.getString("student_first_name");
-				String lastName = rs.getString("student_last_name");
-				String classification = rs.getString("student_classification");
-				int age = rs.getInt("student_age");
+			int numberOfRecordUpdated = pstmt.executeUpdate();
 
-				// 6. Take that information and create a Student object from that information
-				Student s = new Student(id, firstName, lastName, classification, age);
+			if (numberOfRecordUpdated != 1) {
+				throw new SQLException("Unable to update student record w/ id of " + studentId);
+			}
+		}
 
-				// 7. Add the student object to the list
-			
-				System.out.println("Update student first name: " + s);
+		return new Student(studentId, student.getFirstName(), student.getLastName(), student.getClassification(),
+				student.getAge());
+	}
+
+	public void deleteStudentById(int studentId) throws SQLException {
+		try (Connection con = JDBCUtil.getConnection()) {
+			String sql = "DELETE FROM students WHERE student_id = ?";
+
+			PreparedStatement pstmt = con.prepareStatement(sql);
+
+			pstmt.setInt(1, studentId);
+
+			int numberOfRecordUpdated = pstmt.executeUpdate();
+
+			if (numberOfRecordUpdated != 1) {
+				throw new SQLException("Unable to delete student record w/ id of " + studentId);
 			}
 		}
 
 	}
-//
-//	public void deleteStudentById(int id) throws SQLException {
-//		try (Connection con = JDBCUtil.getConnection()) {
-//
-//		}
-//
-//	}
+
+	public void deleteAllStudent() throws SQLException {
+		try (Connection con = JDBCUtil.getConnection()) {
+
+			String sql = "DELETE FROM students";
+
+			PreparedStatement pstmt = con.prepareStatement(sql);
+
+			int numberOfRecordUpdated = pstmt.executeUpdate();
+
+			if (numberOfRecordUpdated == 0) {
+				throw new SQLException("Unable to delete any record check if record exists in the table");
+			}
+		}
+	}
 }

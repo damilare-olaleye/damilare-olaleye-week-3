@@ -1,5 +1,25 @@
-DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS books;
 
+CREATE TABLE books (
+	book_id SERIAL PRIMARY KEY, 
+	isbn VARCHAR(20) NOT NULL,
+	book_name VARCHAR(255),
+	author VARCHAR(255)
+);
+
+SELECT * FROM books; 
+
+INSERT INTO books(isbn, book_name, author) values ('1828hsjdwe23', 'Harry Potter', 'JK Rowling');
+
+UPDATE books 
+	SET isbn = '1828hsjdwe2322',
+	 book_name  = 'Harry Potter',
+	 author = 'JK Rowling',
+WHERE 
+	student_id = 2;
+
+
+DROP TABLE IF EXISTS students;
 -- Creating a Table called students
 CREATE TABLE students (
 	-- This is a comment
@@ -32,3 +52,21 @@ FROM students
 SELECT *
 FROM students
 WHERE student_id = 2;
+
+-- Data Manipulation languge (INSERT, SELECT, UPDATE, DELETE)
+
+UPDATE students 
+	SET student_first_name = 'Megan',
+	 student_last_name  = 'Do',
+	 student_classification = 'Sophmore',
+	 student_age  = 19
+WHERE 
+	student_id = 5;
+
+	
+DELETE 
+FROM students 
+WHERE student_id = 5;
+
+DELETE 
+FROM students ;

@@ -7,6 +7,8 @@ public class Main {
 		
 		Map <String, String> studentMap = new HashMap<>();
 		
+		Integer myint = 2;
+		
 		studentMap.put("001", "John");
 		studentMap.put("003", "David");
 		
