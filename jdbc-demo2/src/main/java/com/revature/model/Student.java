@@ -8,7 +8,7 @@ import java.util.Objects;
 // 3. All private variables
 // 4. getters-setters
 
-public class Student {
+public class Student { 
 
 	private int id;
 	private String firstName;

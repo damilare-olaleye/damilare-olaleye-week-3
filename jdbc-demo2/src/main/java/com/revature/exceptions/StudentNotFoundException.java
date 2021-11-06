@@ -1,12 +1,6 @@
 package com.revature.exceptions;
 
-@SuppressWarnings("serial")
 public class StudentNotFoundException extends Exception {
-
-	/**
-	 * 
-	 */
-//	private static final long serialVersionUID = 1L;
 
 	public StudentNotFoundException() {
 		super();
@@ -28,5 +22,4 @@ public class StudentNotFoundException extends Exception {
 	public StudentNotFoundException(Throwable cause) {
 		super(cause);
 	}
-	
 }

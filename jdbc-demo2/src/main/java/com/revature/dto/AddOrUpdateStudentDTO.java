@@ -1,5 +1,7 @@
 package com.revature.dto;
 
+import java.util.Objects;
+
 public class AddOrUpdateStudentDTO {
 
 	/*
@@ -8,7 +10,7 @@ public class AddOrUpdateStudentDTO {
 	 * That is used to encapsulate data and pass that data around as this single object
 	 * This data will be stored as instance variable/properties of that object
 	 * 
-	 * Model - Is a type of DTO, but more pecifically, it has all of the properties associated with the database representation
+	 * Model - Is a type of DTO, but more specifically, it has all of the properties associated with the database representation
 	 * 
 	 * For example, the Student class is a model of rows in the students table
 	 * 
@@ -63,6 +65,30 @@ public class AddOrUpdateStudentDTO {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "AddOrUpdateStudentDTO [firstName=" + firstName + ", lastName=" + lastName + ", classification="
+				+ classification + ", age=" + age + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(age, classification, firstName, lastName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AddOrUpdateStudentDTO other = (AddOrUpdateStudentDTO) obj;
+		return age == other.age && Objects.equals(classification, other.classification)
+				&& Objects.equals(firstName, other.firstName) && Objects.equals(lastName, other.lastName);
 	}
 	
 	

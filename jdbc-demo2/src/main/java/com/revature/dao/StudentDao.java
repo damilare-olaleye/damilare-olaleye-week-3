@@ -76,7 +76,7 @@ public class StudentDao {
 		}
 	}
 
-	public List<Student> getAllStudents() throws SQLException {
+	public List<Student> getAllStudents() throws SQLException { // GET/students
 
 		List<Student> listOfStudents = new ArrayList<>();
 
@@ -125,7 +125,7 @@ public class StudentDao {
 
 	}
 
-	public Student getStudentById(int id) throws SQLException {
+	public Student getStudentById(int id) throws SQLException { //GET/students/10
 
 		try (Connection con = JDBCUtil.getConnection()) {
 			String sql = "SELECT * FROM students WHERE student_id = ?"; // a '?' is placeholder for arguments that you
@@ -154,7 +154,7 @@ public class StudentDao {
 	// was update, and takes in 2 argument corresponding with the studentid
 	// whose row we would like to update, and the AddOrUpdateStudentDTO object
 	// containing the properties of what we want to update that row with
-	public Student updateStudent(int studentId, AddOrUpdateStudentDTO student) throws SQLException {
+	public Student updateStudent(int studentId, AddOrUpdateStudentDTO student) throws SQLException { // PUT/students/10
 		try (Connection con = JDBCUtil.getConnection()) {
 			String sql = "UPDATE students " + "SET student_first_name = ?," + "		student_last_name = ?,"
 					+ "		student_classification = ?," + "		student_age = ?" + "WHERE " + "student_id = ?;";
@@ -178,7 +178,7 @@ public class StudentDao {
 				student.getAge());
 	}
 
-	public void deleteStudentById(int studentId) throws SQLException {
+	public void deleteStudentById(int studentId) throws SQLException { // DELETE/students/10
 		try (Connection con = JDBCUtil.getConnection()) {
 			String sql = "DELETE FROM students WHERE student_id = ?";
 

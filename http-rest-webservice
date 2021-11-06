@@ -1,0 +1,88 @@
+# Introduction to Webservices
+
+Web services revolve around using a web API.
+
+
+# What is an API?
+API is a very broad term that stands for Application Programming Interface. It enables two applications (or modules) to 
+interact with each other according to a collection of software functions and procedures. An API is essentially a software 
+code that can be accessed and executed.
+
+For exampole, think of the different features in Java we have used or looked at:
+* Core Java (part of the runtime library (JRE))
+    - String API
+    - Collections API
+    - JDBC API
+
+* External libraries (from other developers):
+    - Javalin API
+    - JUnit 5 API (to write Junit tests): Assertions class, annotations, etc.
+    - Selenium API (to write Selenium automation scripts)
+
+As a quick summary: you can think of any group of functionality that you interact with as an API.
+    - Input
+    - Output
+
+# Web Service
+The application / API that you are building in project-0 is a **web service** that utilizes HTTP for communication. We
+have a client/server relationship that is established between Postman (client) and the P0 application (server)
+
+The idea of a web service is provide a common platform that allows different applications built on many different
+programming languages to communicate through a common standard. For example, you could have a Javascript application
+running in your web browser that sends HTTP request to the backend and receives data as a response. You could have Postman
+send a request data in response. You could have a Python application that receives data in the form of an HTTP request, 
+processes the data through machine learning algorithms, and then sends it onto another server for storage in a database
+using JDBC. 
+
+In any case, web services nowadays utilizes HTTP as a protocol for sending and receiving information as well as adhere to 
+RESTful standard in current modern developemnt.
+
+We have in general two types of web services in common use today:
+1. SOAP (Simple Object Access Protocol)
+    - old and typically not utilized anymore except for in legacy systems
+        - old government systems are probably the most common
+    - Data is transferred in XML format
+        - Uses the idea of messages that contain 
+            - Header
+            - Body
+        - Uses HTTP
+2. RESTful web services 
+    - Lightweight, maintainable, and scalable
+    - Uses JSON to structure data
+    - Uses HTTP
+    - Stands for Representational State Transfer
+    - Key elements: 
+        - Request
+            - a. Resources: specified in the URI (`/student/7`)
+            - b. Request Verbs: GET, POST, PUT, DELETE, PATCH, etc. (`GET /students/7`)
+            - c. Request Headers: metadata sent with the request, such as the type of data being sent
+                - ex. ``Content-Type`: `application/json``
+            - d. Request body: data being sent with the request
+        - Response 
+            - a. Response Status Code
+                - 1XX informational, 2XX succcess, 3XX redirect, 4XX client error, 5XX internal server error
+            - b. Response Body: data sent with the response
+            - c. Response Headers: metadata sent with the response
+
+# REST
+- REpresentational State Transfer
+- The main concept of REST is to represent "resources"
+- Ther are a series of constraints on how to best build out a "RESTFUL" system (or application)
+- REST constriants:
+    i. Stateless
+        - The server should not save information (state) about a previous request
+        - In the future, we might need to violate this constraint if we are implementing login functionality. We might
+        achieve login functionality through what is known as HTTP Session (which the server will keep track of), and 
+        this would NOT be stateless
+    - ii. Cacheable
+        - If requests occur often enough for the same resource, there should be some ability to have caching for improved
+        performance
+        - So, for example, instead of querying the database for every single GET request, the resource might be cached on 
+        the server itself
+    - iii. Uniform interface
+        - We should have a uniform way of representing our resources throughout the application
+        - URIs and HTTP methods used for manipulating the resources should be consistent
+        - Response data should be structured in a similar fashion for different resources as well
+    - iv. Client/Server relationship
+        - The API should have an evolving relationshiop with the client that is using it
+        - As resources are changed 

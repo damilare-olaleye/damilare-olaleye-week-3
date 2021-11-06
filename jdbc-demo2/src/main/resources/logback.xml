@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- logback is a logging framework that allows us to create log messages 
+	that will then be appended to certain locations that we specify For example, 
+	we can have log messages displayed in the console, or append to a file, or 
+	even sent to a database or server for storage There are 5 different logging 
+	levels 1. TRACE 2. DEBUG 3. INFO 4. WARN 5. ERROR These log in levels go 
+	in order from the lease important to the most important In our configuration 
+	file below, we configured our logger to only log messages that are INFO and 
+	higher. This means it will ignore TRACE and DEBUG so that we don't get those 
+	log messages cluttering our log files and console We configured 2 appenders: 
+	the console appender and file appender 1. The console appender appends to 
+	the console 2. The file appender appends to a file in our project folder 
+	When we included logback classic as a dependency -->
+
+<configuration>
+
+	<appender name="myConsoleAppender"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{dd MMM yyyy - HH:mm:ss.SSS} [%thread] %-5level
+				%logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="myFileAppender"
+		class="ch.qos.logback.core.FileAppender">
+		<file>mylogfile.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{dd MMM yyyy - HH:mm:ss.SSS} [%thread] %-5level
+				%logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- here we configure the logger itself By default, logback uses what is 
+		known as the root logger, so that is the one we will use -->
+	<root level="INFO">
+		<!-- We configure what appenders we want for this logger to actually utilize -->
+		<appender-ref ref="myConsoleAppender" />
+		<appender-ref ref="myFileAppender" />
+	</root>
+
+	<logger name="io.javalin.Javalin" level="OFF" />
+
+</configuration>
